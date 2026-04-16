@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const app = express();
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ storage: multer.memoryStorage() });
 app.use(express.static('public'));
 
 // Render.com gibi servisler için dinamik port ayarı, lokalde ise 3000 portu
