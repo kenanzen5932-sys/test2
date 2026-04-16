@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Selfie Site – Anlık Fotoğraf</title>
+  <style>
+    body {font-family: Arial, sans-serif; text-align:center; margin-top:2rem;}
+    video, canvas {max-width:100%; border:2px solid #333;}
+    #msg {color:#c00; margin-top:1rem;}
+  </style>
+</head>
+<body>
+  <h1>Selfie Site</h1>
+  <p>Kameranıza izin verin, fotoğraf otomatik olarak çekilecek.</p>
+  <video id="video" autoplay playsinline></video>
+  <canvas id="canvas" style="display:none;"></canvas>
+  <div id="msg"></div>
+  <script src="selfie.js"></script>
+</body>
+</html>

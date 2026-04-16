@@ -1,4 +1,4 @@
-export default function handler(req, res) {
+module.exports = (req, res) => {
   // IP (Vercel adds X-Forwarded-For header)
   const ip = (req.headers['x-forwarded-for']?.split(',')[0]?.trim()) ||
              req.headers['x-real-ip'] ||

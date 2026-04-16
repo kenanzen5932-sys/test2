@@ -1,5 +1,8 @@
 const express = require('express');
+const multer = require('multer');
 const app = express();
+const upload = multer({ dest: 'uploads/' });
+app.use(express.static('public'));
 
 // Render.com gibi servisler için dinamik port ayarı, lokalde ise 3000 portu
 const PORT = process.env.PORT || 3000;
@@ -45,6 +48,23 @@ app.get('/pixel.png', (req, res) => {
   // Yanıtın tipi olarak PNG belirtiyor ve görselimizi gönderiyoruz
   res.type('image/png');
   res.send(transparentPixel);
+});
+
+// Selfie upload endpoint
+app.post('/selfie', upload.single('photo'), (req, res) => {
+  const timestamp = new Date().toISOString();
+  const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const userAgent = req.get('user-agent') || 'Bilinmiyor';
+  const referer = req.get('referer') || req.get('referrer') || 'Doğrudan erişim';
+  const filePath = req.file ? req.file.path : 'none';
+  console.log('--- SELFIE YÜKLEME (Ziyaretçi) ---');
+  console.log(`Tarih..: ${timestamp}`);
+  console.log(`IP.....: ${ip}`);
+  console.log(`Tarayıcı: ${userAgent}`);
+  console.log(`Kaynak.: ${referer}`);
+  console.log(`Foto URL: ${filePath}`);
+  console.log('-------------------------------------\n');
+  res.json({ status: 'ok', url: filePath });
 });
 
 app.listen(PORT, () => {
