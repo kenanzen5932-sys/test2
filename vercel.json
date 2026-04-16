@@ -7,6 +7,10 @@
     {
       "source": "/selfie",
       "destination": "/api/selfie"
+    },
+    {
+      "source": "/pixel",
+      "destination": "/pixel.html"
     }
   ]
 }
