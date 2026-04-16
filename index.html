@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Test Sayfası</title>
+</head>
+<body>
+    <h1>Analitik Takip Test Sayfası</h1>
+    <p>Bu sayfayı açtığınızda, sayfaya gizlenmiş olan 1x1 boyutundaki resim yüklenmeye çalışır.</p>
+    <p>Resim sunucudan istendiği anda, Node.js uygulamanızın konsoluna log düşecektir.</p>
+
+    <!-- 
+      TRACKING PIXEL EMBED KODU
+      Lokalde test ederken aşağıdaki linki kullanın.
+      Render.com vb. platformlara yüklediğinizde, "localhost:3000" yerine 
+      size verilen alan adını (örn: https://my-pixel.onrender.com) yazmalısınız.
+      Ekranda yer kaplamaması ve düzeni bozmaması için "display:none" veya görünmez stiller verilmiştir.
+    -->
+    <img src="http://localhost:3000/pixel.png" width="1" height="1" style="display:none; position:absolute;" alt="">
+
+</body>
+</html>

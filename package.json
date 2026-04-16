@@ -1,0 +1,12 @@
+{
+  "name": "simple-tracking-pixel",
+  "version": "1.0.0",
+  "description": "Eğitim ve analitik amaçlı basit tracking pixel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
